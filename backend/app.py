@@ -14,7 +14,7 @@ from pathlib import Path
 app = Flask(__name__, 
             template_folder='../frontend/templates',
             static_folder='../frontend/static')
-app.config['SECRET_KEY'] = 'your-secret-key-here-change-in-production'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-here-change-in-production')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(os.path.abspath(os.path.dirname(os.path.dirname(__file__))), 'database', 'civic_system.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB limit for base64 photo data
@@ -640,16 +640,14 @@ def create_sample_data():
     db.session.commit()
     print("Sample data created successfully")
 
+# ==================== INITIALIZE DATABASE ====================
+
+with app.app_context():
+    db.create_all()
+    create_sample_data()
+
 # ==================== MAIN ====================
 
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-        create_sample_data()
-
     port = int(os.environ.get("PORT", 5000))
-<<<<<<< HEAD
-    app.run(host="0.0.0.0", port=port, debug=False)
-=======
     app.run(host="0.0.0.0", port=port)
->>>>>>> 2408cfc371e3fec6756d60c310912defba36be40

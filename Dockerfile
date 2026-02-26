@@ -13,12 +13,17 @@ RUN pip install --no-cache-dir -r backend/requirements.txt
 # Copy the rest of the application code into the container
 COPY . .
 
+# Create database and uploads directories
+RUN mkdir -p /app/database /app/frontend/static/uploads
+
 # Expose the port the app runs on
 EXPOSE 5000
 
 # Set environment variables
 ENV FLASK_APP=backend/app.py
 ENV FLASK_RUN_HOST=0.0.0.0
+ENV PORT=5000
 
-# Run the application
-CMD ["python", "backend/app.py"]
+# Run with gunicorn for production (Render sets PORT automatically)
+CMD gunicorn --bind 0.0.0.0:$PORT --chdir /app backend.app:app
+
