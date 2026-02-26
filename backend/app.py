@@ -648,4 +648,8 @@ if __name__ == "__main__":
         create_sample_data()
 
     port = int(os.environ.get("PORT", 5000))
+<<<<<<< HEAD
     app.run(host="0.0.0.0", port=port, debug=False)
+=======
+    app.run(host="0.0.0.0", port=port)
+>>>>>>> 2408cfc371e3fec6756d60c310912defba36be40
